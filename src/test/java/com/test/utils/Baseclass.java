@@ -22,4 +22,10 @@ public class Baseclass {
         file.close();
 
     }
+
+    public void readJSON(String filepath) throws IOException, ParseException {
+        JSONParser jsonParser = new JSONParser();
+        FileReader reader = new FileReader(filepath);
+                Object obj = jsonParser.parse(reader);
+    }
 }

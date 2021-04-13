@@ -9,11 +9,13 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONPointer;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -23,18 +25,24 @@ import java.util.concurrent.TimeUnit;
 
 public class Facebookupdate {
     List<String> profilesGlobal = null;
+    String groupID = null;
 
     Baseclass baseclass;
     WebDriver driver = null;
 
     @Given("^user login to facebook$")
-    public void navigateToFBandLogin() {
+    public void navigateToFBandLogin() throws IOException, ParseException {
         System.setProperty("webdriver.chrome.driver", "C:/Users/shipr/Downloads/chromedriver_win32/chromedriver.exe");
         driver = new ChromeDriver();
         driver.get("https://www.facebook.com/");
         System.out.println("Success");
-        driver.findElement(By.id("email")).sendKeys("shivanginigam4@gmail.com");
-        driver.findElement(By.id("pass")).sendKeys("Facebook@2021");
+        JSONParser jsonParser = new JSONParser();
+        FileReader reader = new FileReader("src/test/resources/Data/credentials.json");
+        Object obj = jsonParser.parse(reader);
+        org.json.simple.JSONObject jsondata = (org.json.simple.JSONObject)obj;
+        groupID = (String) jsondata.get("groupID");
+        driver.findElement(By.id("email")).sendKeys((CharSequence) jsondata.get("usernameFB"));
+        driver.findElement(By.id("pass")).sendKeys((CharSequence) jsondata.get("passwordFB"));
         driver.findElement(By.name("login")).click();
     }
 
@@ -46,7 +54,7 @@ public class Facebookupdate {
         String profileID = null;
         FileWriter file = new FileWriter("src/test/resources/Data/output.json");
         Thread.sleep(10000);
-        driver.navigate().to("https://www.facebook.com/groups/180913030412171/member-requests");
+        driver.navigate().to("https://www.facebook.com/groups/"+groupID+"/member-requests");
         System.out.println("inside");
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         if (driver.findElements(By.xpath("//span[contains(@class,'d2edcug0 hpfvmrgz qv66sw1b c1et5uql lr9zc1uh a5q79mjw g1cxx5fr knj5qynh m9osqain')]")).size() > 0) {
@@ -77,7 +85,7 @@ public class Facebookupdate {
     public List<String> userNavigatesToMember() throws InterruptedException {
         ArrayList<String> profiles = new ArrayList<>();
         Thread.sleep(5000);
-        driver.navigate().to("https://www.facebook.com/groups/180913030412171/members");
+        driver.navigate().to("https://www.facebook.com/groups/"+groupID+"/members");
         driver.manage().timeouts().implicitlyWait(5000, TimeUnit.SECONDS);
         System.out.println("Members");
         Thread.sleep(5000);
