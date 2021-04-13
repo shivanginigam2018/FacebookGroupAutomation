@@ -26,11 +26,12 @@ formatter.step({
   "keyword": "Given "
 });
 formatter.step({
-  "line": 6,
-  "name": "user navigates to Member",
-  "keyword": "When "
-});
-formatter.step({
+  "comments": [
+    {
+      "line": 6,
+      "value": "#  When user navigates to Member"
+    }
+  ],
   "line": 7,
   "name": "Data is updated",
   "keyword": "Then "
@@ -39,21 +40,9 @@ formatter.match({
   "location": "Facebookupdate.navigateToFBandLogin()"
 });
 formatter.result({
-  "duration": 17733999880,
-  "status": "passed"
-});
-formatter.match({
-  "location": "Facebookupdate.userNavigatesToMember()"
-});
-formatter.result({
-  "duration": 17411281051,
+  "duration": 14455888134,
   "status": "passed"
 });
 formatter.match({
   "location": "Facebookupdate.data_is_updated()"
-});
-formatter.result({
-  "duration": 17786791556,
-  "status": "passed"
-});
 });

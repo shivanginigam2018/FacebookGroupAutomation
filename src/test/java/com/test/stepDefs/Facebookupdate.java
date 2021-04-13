@@ -14,6 +14,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -26,14 +27,19 @@ import java.util.concurrent.TimeUnit;
 public class Facebookupdate {
     List<String> profilesGlobal = null;
     String groupID = null;
+    String hubspotUN = null;
+    String hubspotPass = null;
 
     Baseclass baseclass;
     WebDriver driver = null;
 
     @Given("^user login to facebook$")
     public void navigateToFBandLogin() throws IOException, ParseException {
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("start-maximised","--disable-blink-features=AutomationControlled");
         System.setProperty("webdriver.chrome.driver", "C:/Users/shipr/Downloads/chromedriver_win32/chromedriver.exe");
-        driver = new ChromeDriver();
+        driver = new ChromeDriver(options);
+
         driver.get("https://www.facebook.com/");
         System.out.println("Success");
         JSONParser jsonParser = new JSONParser();
@@ -41,6 +47,8 @@ public class Facebookupdate {
         Object obj = jsonParser.parse(reader);
         org.json.simple.JSONObject jsondata = (org.json.simple.JSONObject)obj;
         groupID = (String) jsondata.get("groupID");
+        hubspotUN = (String) jsondata.get("hubspotUN");
+        hubspotPass = (String) jsondata.get("hubspotPass");
         driver.findElement(By.id("email")).sendKeys((CharSequence) jsondata.get("usernameFB"));
         driver.findElement(By.id("pass")).sendKeys((CharSequence) jsondata.get("passwordFB"));
         driver.findElement(By.name("login")).click();
@@ -101,9 +109,22 @@ public class Facebookupdate {
 
     @Then("^Data is updated$")
     public void data_is_updated() throws Throwable {
-        System.out.println(profilesGlobal);
+
+//        driver.manage().deleteAllCookies();
+
+        String hubSpotURL = "https://app.hubspot.com/login";
+        Thread.sleep(5000);
+        System.setProperty("webdriver.chrome.driver", "C:/Users/shipr/Downloads/chromedriver_win32/chromedriver.exe");
+
+        driver.get(hubSpotURL);
+        Thread.sleep(10000);
+        driver.findElement(By.id("hs-eu-decline-button")).click();
+        driver.manage().timeouts().implicitlyWait(10000, TimeUnit.SECONDS);
+        driver.findElement(By.xpath("//a[@class='homepage-nav-login']")).click();
+        driver.findElement(By.xpath("//input[@type='email']")).sendKeys(hubspotUN);
+        driver.findElement(By.xpath("//input[@type='password']")).sendKeys(hubspotPass);
+        driver.findElement(By.xpath("//button[@id='loginBtn']")).click();
         JSONParser jp = new JSONParser();
-//        FileReader fr = new FileReader("src/test/resources/Data/output.json");
         Object obj = jp.parse(new FileReader("src/test/resources/Data/output.json"));
         org.json.simple.JSONArray jsonArray = (org.json.simple.JSONArray) obj;
         for (int i = 0; i < profilesGlobal.size(); i++) {
