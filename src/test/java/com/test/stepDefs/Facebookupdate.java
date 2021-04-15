@@ -172,29 +172,63 @@ public class Facebookupdate {
 
     @Then("^DB is updated$")
     public void dbIsUpdated() throws IOException {
+        String line = null;
+        boolean dataflag = false;
         File file = new File("src/test/resources/Data/FBdata.csv");
-        PrintWriter pw = new PrintWriter(file);
-        StringBuilder sb = new StringBuilder();
         Iterator<Map.Entry<String, String>> it = ApprovedProfiles.entrySet().iterator();
-        while(it.hasNext()) {
-            Map.Entry<String, String> set = (Map.Entry<String, String>) it.next();
+        StringBuilder sb = new StringBuilder();
+        PrintWriter bw = new PrintWriter(new FileWriter("src/test/resources/Data/FBdata.xlsx"));
+        if(file.exists() && file.length()>0) {
+            while (it.hasNext()) {
+                Map.Entry<String, String> set = (Map.Entry<String, String>) it.next();
+                Scanner scanner = new Scanner(file);
+                String headerline = scanner.nextLine();
+                while (scanner.hasNext()) {
+                    line = scanner.nextLine();
+                    // process the line
+                    if ((set.getKey()).equalsIgnoreCase(line.trim().split("\t")[0] + " " + line.split("\t")[1])) {
+                        dataflag = true;
+                    } else
+                        dataflag = false;
+                    if (dataflag)
+                        break;
+                }
+                if (dataflag == false) {
+                    FileWriter filew = new FileWriter("src/test/resources/Data/FBdata.csv", true);
+                    sb.append("\r\n");
+                    sb.append(set.getKey().toString().split(" ")[0]);
+                    sb.append("\t");
+                    sb.append(set.getKey().toString().split(" ")[1]);
+                    sb.append("\t");
+                    sb.append(set.getValue());
+                    sb.append("\r\n");
+                    filew.append(sb);
+                    filew.flush();
+                }
+            }
+        }
+        else {
+            PrintWriter pw = new PrintWriter(file);
             sb.append("First name");
             sb.append("\t");
             sb.append("Last name");
             sb.append("\t");
             sb.append("Email");
             sb.append("\r\n");
-            sb.append(set.getKey().toString().split(" ")[0]);
-            sb.append("\t");
-            sb.append(set.getKey().toString().split(" ")[1]);
-            sb.append("\t");
-            sb.append(set.getValue());
-//        sb.append(Lastname);
-//        sb.append(email);
+            while (it.hasNext()) {
+                Map.Entry<String, String> set = (Map.Entry<String, String>) it.next();
+                sb.append(set.getKey().toString().split(" ")[0]);
+                sb.append("\t");
+                sb.append(set.getKey().toString().split(" ")[1]);
+                sb.append("\t");
+                sb.append(set.getValue());
+                sb.append("\r\n");
+            }
             pw.write(sb.toString());
             pw.close();
         }
         driver.close();
     }
     }
+
 

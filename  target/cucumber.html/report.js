@@ -44,9 +44,28 @@ formatter.match({
   "location": "Facebookupdate.navigateToFBandLogin()"
 });
 formatter.result({
-  "duration": 12314625259,
+  "duration": 23063362754,
   "status": "passed"
 });
 formatter.match({
   "location": "Facebookupdate.userNavigatesToMember()"
+});
+formatter.result({
+  "duration": 16951341865,
+  "status": "passed"
+});
+formatter.match({
+  "location": "Facebookupdate.data_is_updated()"
+});
+formatter.result({
+  "duration": 27459090,
+  "status": "passed"
+});
+formatter.match({
+  "location": "Facebookupdate.dbIsUpdated()"
+});
+formatter.result({
+  "duration": 35416760011,
+  "status": "passed"
+});
 });
