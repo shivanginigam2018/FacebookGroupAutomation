@@ -1,14 +1,14 @@
-$(document).ready(function() {var formatter = new CucumberHTML.DOMFormatter($('.cucumber-report'));formatter.uri("UpdateDB.feature");
+$(document).ready(function() {var formatter = new CucumberHTML.DOMFormatter($('.cucumber-report'));formatter.uri("Login.feature");
 formatter.feature({
   "line": 2,
-  "name": "Update Hubspot",
+  "name": "Validate FB Group Request Update",
   "description": "",
-  "id": "update-hubspot",
+  "id": "validate-fb-group-request-update",
   "keyword": "Feature",
   "tags": [
     {
       "line": 1,
-      "name": "@run1"
+      "name": "@run"
     }
   ]
 });
@@ -16,7 +16,7 @@ formatter.scenario({
   "line": 4,
   "name": "Update Facebook Member data",
   "description": "",
-  "id": "update-hubspot;update-facebook-member-data",
+  "id": "validate-fb-group-request-update;update-facebook-member-data",
   "type": "scenario",
   "keyword": "Scenario"
 });
@@ -26,23 +26,22 @@ formatter.step({
   "keyword": "Given "
 });
 formatter.step({
-  "comments": [
-    {
-      "line": 6,
-      "value": "#  When user navigates to Member"
-    }
-  ],
-  "line": 7,
-  "name": "Data is updated",
-  "keyword": "Then "
+  "line": 6,
+  "name": "user navigates to Member requests and collate data",
+  "keyword": "When "
 });
 formatter.match({
   "location": "Facebookupdate.navigateToFBandLogin()"
 });
 formatter.result({
-  "duration": 14455888134,
+  "duration": 15002459872,
   "status": "passed"
 });
 formatter.match({
-  "location": "Facebookupdate.data_is_updated()"
+  "location": "Facebookupdate.MemberRequestDataupdate()"
+});
+formatter.result({
+  "duration": 23637750275,
+  "status": "passed"
+});
 });

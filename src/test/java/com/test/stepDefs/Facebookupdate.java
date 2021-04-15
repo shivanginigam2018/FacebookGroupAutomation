@@ -5,6 +5,9 @@ import cucumber.api.PendingException;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import org.apache.poi.ss.SpreadsheetVersion;
+import org.apache.poi.ss.formula.udf.UDFFinder;
+import org.apache.poi.ss.usermodel.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONPointer;
@@ -15,28 +18,31 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.support.events.EventFiringWebDriver;
+import org.openqa.selenium.support.events.WebDriverEventListener;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class Facebookupdate {
     List<String> profilesGlobal = null;
     String groupID = null;
     String hubspotUN = null;
     String hubspotPass = null;
-
+    EventFiringWebDriver eDriver;
+    WebDriverEventListener eventListener;
+    HashMap<String, String> ApprovedProfiles;
     Baseclass baseclass;
     WebDriver driver = null;
+    public static XSSFWorkbook wb;
 
     @Given("^user login to facebook$")
     public void navigateToFBandLogin() throws IOException, ParseException {
         ChromeOptions options = new ChromeOptions();
-        options.addArguments("start-maximised","--disable-blink-features=AutomationControlled");
+//        options.addArguments("start-maximised","--disable-blink-features=AutomationControlled");
         System.setProperty("webdriver.chrome.driver", "C:/Users/shipr/Downloads/chromedriver_win32/chromedriver.exe");
         driver = new ChromeDriver(options);
 
@@ -55,38 +61,70 @@ public class Facebookupdate {
     }
 
     @When("^user navigates to Member requests and collate data$")
-    public void MemberRequestDataupdate() throws InterruptedException, IOException {
+    public void MemberRequestDataupdate() throws InterruptedException, IOException, ParseException {
         JSONObject obj = new JSONObject();
+        JSONParser jsonParser = new JSONParser();
+        boolean flag = false;
         String email = null;
         String name = null;
         String profileID = null;
-        FileWriter file = new FileWriter("src/test/resources/Data/output.json");
-        Thread.sleep(10000);
-        driver.navigate().to("https://www.facebook.com/groups/"+groupID+"/member-requests");
-        System.out.println("inside");
+        JSONArray json = new JSONArray();
+        Thread.sleep(5000);
+        driver.navigate().to("https://www.facebook.com/groups/" + groupID + "/member-requests");
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         if (driver.findElements(By.xpath("//span[contains(@class,'d2edcug0 hpfvmrgz qv66sw1b c1et5uql lr9zc1uh a5q79mjw g1cxx5fr knj5qynh m9osqain')]")).size() > 0) {
             String size = driver.findElement(By.xpath("//span[contains(@class,'d2edcug0 hpfvmrgz qv66sw1b c1et5uql lr9zc1uh a5q79mjw g1cxx5fr knj5qynh m9osqain')]")).getText();
             size = size.split(" . ")[1];
             WebElement profilesdiv = driver.findElement(By.xpath("//div[@class='l9j0dhe7 stjgntxs ni8dbmo4 ap1mbyyd dhix69tm wkznzc2l ibutc8p7 l82x9zwi uo3d90p7 cwj9ozl2']"));
             List<WebElement> profiles = profilesdiv.findElements(By.xpath("//div[@class='a8nywdso f10w8fjw rz4wbd8a pybr56ya']"));
-            List<WebElement> profileIDs = driver.findElements(By.xpath("//a[contains(@href,'https://www.facebook.com/profile.php?id')]"));
+            List<WebElement> profileIDs = driver.findElements(By.xpath("//div/a[contains(@href,'/groups/"+groupID+"/user')]"));
             for (int i = 0; i < profiles.size(); i++) {
                 String data[] = profiles.get(i).getText().split("\\r?\\n");
                 if ((data[data.length - 1] != " ") && data[data.length - 1].contains("@")) {
                     name = data[0];
                     email = data[data.length - 1];
-                    profileID = profileIDs.get(i).getAttribute("href").split("=")[1].trim();
+                    profileID = profileIDs.get(i).getAttribute("href").split("user/")[1];
+                    profileID = profileID.split("/")[0];
                     obj.put("ProfileID", profileID);
                     obj.put("Name", name);
                     obj.put("Email", email);
                 }
+                System.out.println("Hi");
+                File outputfile = new File("src/test/resources/Data/output.json");
+                boolean exists = outputfile.exists();
+                int length = (int) outputfile.length();
+                FileReader file = new FileReader(outputfile);
+                if (exists && length > 0) {
+                    Object obj1 = jsonParser.parse(file);
+                    org.json.simple.JSONArray usersList = (org.json.simple.JSONArray) obj1;
+                    for(int j =0; j< usersList.size(); j++) {
+                        org.json.simple.JSONObject existingProfile= (org.json.simple.JSONObject) usersList.get(j);
+                        String existingID = (String) existingProfile.get("ProfileID");
+                        if(obj.get("ProfileID").toString().equalsIgnoreCase(existingID)) {
+                            flag = true;
+                        }
+                        if(flag)
+                            break;
+                    }
+                    if(flag==false) {
+                        usersList.add(obj);
+                        FileWriter filew = new FileWriter("src/test/resources/Data/output.json");
+                        filew.append(usersList.toJSONString());
+                        filew.flush();
+                    }
+                    file.close();
+                }
+                else {
+                    FileWriter filew1 = new FileWriter("src/test/resources/Data/output.json");
+                    JSONArray jsonArr = new JSONArray();
+                    jsonArr.put(obj);
+                    filew1.write(jsonArr.toString());
+                    filew1.close();
+                }
+
             }
-            JSONArray json = new JSONArray();
-            json.put(obj);
-            file.write(String.valueOf(json));
-            file.close();
         }
+        driver.close();
     }
 
     @When("^user navigates to Member$")
@@ -109,21 +147,8 @@ public class Facebookupdate {
 
     @Then("^Data is updated$")
     public void data_is_updated() throws Throwable {
-
-//        driver.manage().deleteAllCookies();
-
-        String hubSpotURL = "https://app.hubspot.com/login";
-        Thread.sleep(5000);
-        System.setProperty("webdriver.chrome.driver", "C:/Users/shipr/Downloads/chromedriver_win32/chromedriver.exe");
-
-        driver.get(hubSpotURL);
-        Thread.sleep(10000);
-        driver.findElement(By.id("hs-eu-decline-button")).click();
         driver.manage().timeouts().implicitlyWait(10000, TimeUnit.SECONDS);
-        driver.findElement(By.xpath("//a[@class='homepage-nav-login']")).click();
-        driver.findElement(By.xpath("//input[@type='email']")).sendKeys(hubspotUN);
-        driver.findElement(By.xpath("//input[@type='password']")).sendKeys(hubspotPass);
-        driver.findElement(By.xpath("//button[@id='loginBtn']")).click();
+//        driver.findElement(By.xpath("//button[@id='loginBtn']")).click();
         JSONParser jp = new JSONParser();
         Object obj = jp.parse(new FileReader("src/test/resources/Data/output.json"));
         org.json.simple.JSONArray jsonArray = (org.json.simple.JSONArray) obj;
@@ -135,9 +160,37 @@ public class Facebookupdate {
                 String userEmail = (String) jsonObject.get("Email");
                 if (profilesGlobal.get(i).equalsIgnoreCase(profileID)) {
                     System.out.println("Match for profile" + profileID);
+                    ApprovedProfiles.put(userName, userEmail);
                     break;
                 }
             }
         }
     }
-}
+
+    @Then("^DB is updated$")
+    public void dbIsUpdated() throws IOException {
+        File file = new File("src/test/resources/Data/FBdata.csv");
+        PrintWriter pw = new PrintWriter(file);
+        StringBuilder sb = new StringBuilder();
+        Iterator<Map.Entry<String, String>> it = ApprovedProfiles.entrySet().iterator();
+        while(it.hasNext()) {
+            Map.Entry<String, String> set = (Map.Entry<String, String>) it.next();
+            sb.append("First name");
+            sb.append("\t");
+            sb.append("Last name");
+            sb.append("\t");
+            sb.append("Email");
+            sb.append("\n");
+            sb.append(set.getKey().toString().split(" ")[0]);
+            sb.append("\t");
+            sb.append(set.getKey().toString().split(" ")[1]);
+            sb.append("\t");
+            sb.append(set.getValue());
+//        sb.append(Lastname);
+//        sb.append(email);
+            pw.write(sb.toString());
+            pw.close();
+        }
+    }
+    }
+
