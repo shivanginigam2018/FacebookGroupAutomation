@@ -141,6 +141,7 @@ public class Facebookupdate {
             String profileID = member.getAttribute("href").split("user/")[1].replace("/", "");
             profiles.add(profileID);
         }
+
         this.profilesGlobal = profiles;
         return profilesGlobal;
     }
@@ -152,6 +153,7 @@ public class Facebookupdate {
         JSONParser jp = new JSONParser();
         Object obj = jp.parse(new FileReader("src/test/resources/Data/output.json"));
         org.json.simple.JSONArray jsonArray = (org.json.simple.JSONArray) obj;
+        ApprovedProfiles = new HashMap<String, String>();
         for (int i = 0; i < profilesGlobal.size(); i++) {
             for (int j = 0; j < jsonArray.size(); j++) {
                 org.json.simple.JSONObject jsonObject = (org.json.simple.JSONObject) jsonArray.get(j);
@@ -165,6 +167,7 @@ public class Facebookupdate {
                 }
             }
         }
+        this.ApprovedProfiles=ApprovedProfiles;
     }
 
     @Then("^DB is updated$")
@@ -180,7 +183,7 @@ public class Facebookupdate {
             sb.append("Last name");
             sb.append("\t");
             sb.append("Email");
-            sb.append("\n");
+            sb.append("\r\n");
             sb.append(set.getKey().toString().split(" ")[0]);
             sb.append("\t");
             sb.append(set.getKey().toString().split(" ")[1]);
@@ -191,6 +194,7 @@ public class Facebookupdate {
             pw.write(sb.toString());
             pw.close();
         }
+        driver.close();
     }
     }
 

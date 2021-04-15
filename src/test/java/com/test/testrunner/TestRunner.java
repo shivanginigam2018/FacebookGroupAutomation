@@ -9,7 +9,7 @@ import org.junit.runner.RunWith;
 @CucumberOptions(
         monochrome = true,
         plugin = {"html: target/cucumber.html"},
-        tags = {"@run"},
+        tags = {"@run1"},
         glue = {"com/test/stepDefs/"},
         features = "src/test/resources/Features")
 
