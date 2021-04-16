@@ -1,0 +1,21 @@
+<profiles>
+    <profile>
+        <id>space</id>
+<pluginRepositories>
+    <pluginRepository>
+        <releases>
+            <enabled>true</enabled>
+        </releases>
+        <snapshots>
+            <enabled>true</enabled>
+        </snapshots>
+        <id>central</id>
+        <url>https://repo1.maven.org/maven2</url>
+    </pluginRepository>
+</pluginRepositories>
+        </profile>
+        </profiles>
+
+<activeProfiles>
+<activeProfile>space</activeProfile>
+</activeProfiles>
