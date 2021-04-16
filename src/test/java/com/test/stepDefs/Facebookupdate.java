@@ -24,8 +24,7 @@ import org.openqa.selenium.support.events.WebDriverEventListener;
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 
 public class Facebookupdate {
     List<String> profilesGlobal = null;
@@ -37,7 +36,7 @@ public class Facebookupdate {
     HashMap<String, String> ApprovedProfiles;
     Baseclass baseclass;
     WebDriver driver = null;
-    public static XSSFWorkbook wb;
+
 
     @Given("^user login to facebook$")
     public void navigateToFBandLogin() throws IOException, ParseException {
