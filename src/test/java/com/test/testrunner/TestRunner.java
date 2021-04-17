@@ -12,7 +12,7 @@ import org.junit.runner.RunWith;
         tags = {"@run"},
         glue = {"com/test/stepDefs/"},
         features = "src/test/resources/Features",
-        plugin = {"json:target/cucumber.json"})
+        plugin = {"json:target/cucumber-report.json"})
 
 public class TestRunner {
 }
