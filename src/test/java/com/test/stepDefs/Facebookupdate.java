@@ -41,11 +41,14 @@ public class Facebookupdate {
     @Given("^user login to facebook$")
     public void navigateToFBandLogin() throws IOException, ParseException {
         ChromeOptions options = new ChromeOptions();
+        options.addArguments("--no-sandbox");
+        options.addArguments("--incognito-");
 //        options.addArguments("start-maximised","--disable-blink-features=AutomationControlled");
         System.setProperty("webdriver.chrome.driver", "drivers/chromedriver.exe");
         driver = new ChromeDriver(options);
 
         driver.get("https://www.facebook.com/");
+        driver.manage().window().maximize();
         System.out.println("Success");
         JSONParser jsonParser = new JSONParser();
         FileReader reader = new FileReader("src/test/resources/Data/credentials.json");
@@ -124,6 +127,7 @@ public class Facebookupdate {
             }
         }
         driver.close();
+        driver.quit();
     }
 
     @When("^user navigates to Member$")
