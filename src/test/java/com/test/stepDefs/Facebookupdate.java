@@ -124,6 +124,7 @@ public class Facebookupdate {
             }
         }
         driver.close();
+        driver.quit();
     }
 
     @When("^user navigates to Member$")
@@ -227,6 +228,7 @@ public class Facebookupdate {
             pw.close();
         }
         driver.close();
+        driver.quit();
     }
     }
 
