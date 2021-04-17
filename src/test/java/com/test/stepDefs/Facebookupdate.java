@@ -42,7 +42,7 @@ public class Facebookupdate {
     public void navigateToFBandLogin() throws IOException, ParseException {
 //        ChromeOptions options = new ChromeOptions();
 //        options.addArguments("start-maximised","--disable-blink-features=AutomationControlled");
-        System.setProperty("webdriver.chrome.driver", "driver/chromedriver.exe");
+        System.setProperty("webdriver.chrome.driver", "drivers/chromedriver.exe");
         driver = new ChromeDriver();
         driver.get("https://www.facebook.com/");
         driver.manage().window().maximize();
