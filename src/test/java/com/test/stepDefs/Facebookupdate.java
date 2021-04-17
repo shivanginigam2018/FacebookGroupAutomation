@@ -176,7 +176,6 @@ public class Facebookupdate {
         File file = new File("src/test/resources/Data/FBdata.csv");
         Iterator<Map.Entry<String, String>> it = ApprovedProfiles.entrySet().iterator();
         StringBuilder sb = new StringBuilder();
-        PrintWriter bw = new PrintWriter(new FileWriter("src/test/resources/Data/FBdata.xlsx"));
         if(file.exists() && file.length()>0) {
             while (it.hasNext()) {
                 Map.Entry<String, String> set = (Map.Entry<String, String>) it.next();
@@ -200,7 +199,6 @@ public class Facebookupdate {
                     sb.append(set.getKey().toString().split(" ")[1]);
                     sb.append("\t");
                     sb.append(set.getValue());
-                    sb.append("\r\n");
                     filew.append(sb);
                     filew.flush();
                 }
@@ -213,15 +211,14 @@ public class Facebookupdate {
             sb.append("Last name");
             sb.append("\t");
             sb.append("Email");
-            sb.append("\r\n");
             while (it.hasNext()) {
                 Map.Entry<String, String> set = (Map.Entry<String, String>) it.next();
+                sb.append("\r\n");
                 sb.append(set.getKey().toString().split(" ")[0]);
                 sb.append("\t");
                 sb.append(set.getKey().toString().split(" ")[1]);
                 sb.append("\t");
                 sb.append(set.getValue());
-                sb.append("\r\n");
             }
             pw.write(sb.toString());
             pw.close();
