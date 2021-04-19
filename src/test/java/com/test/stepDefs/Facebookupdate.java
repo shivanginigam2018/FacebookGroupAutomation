@@ -44,10 +44,11 @@ public class Facebookupdate {
         options.addArguments("--no-sandbox");
         options.addArguments("--incognito-");
 //        options.addArguments("start-maximised","--disable-blink-features=AutomationControlled");
-        System.setProperty("webdriver.chrome.driver", "drivers/chromedriver1.exe");
+        System.setProperty("webdriver.chrome.driver", "drivers/chromedriver.exe");
         driver = new ChromeDriver(options);
         driver.get("https://www.facebook.com/");
         driver.manage().window().maximize();
+        
         System.out.println("Success");
         JSONParser jsonParser = new JSONParser();
         FileReader reader = new FileReader("src/test/resources/Data/credentials.json");
