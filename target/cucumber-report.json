@@ -12,7 +12,7 @@
         "steps": [
           {
             "result": {
-              "duration": 18978733826,
+              "duration": 50397773941,
               "status": "passed"
             },
             "line": 5,
@@ -24,7 +24,7 @@
           },
           {
             "result": {
-              "duration": 30024475841,
+              "duration": 20622336252,
               "status": "passed"
             },
             "line": 6,
@@ -36,7 +36,7 @@
           },
           {
             "result": {
-              "duration": 10565958,
+              "duration": 8797285,
               "status": "passed"
             },
             "line": 7,
@@ -48,7 +48,7 @@
           },
           {
             "result": {
-              "duration": 3591834750,
+              "duration": 4226266131,
               "status": "passed"
             },
             "line": 8,
