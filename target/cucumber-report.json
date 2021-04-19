@@ -1,0 +1,85 @@
+[
+  {
+    "line": 2,
+    "elements": [
+      {
+        "line": 4,
+        "name": "Update Facebook Member data",
+        "description": "",
+        "id": "update-hubspot;update-facebook-member-data",
+        "type": "scenario",
+        "keyword": "Scenario",
+        "steps": [
+          {
+            "result": {
+              "duration": 42723774117,
+              "status": "passed"
+            },
+            "line": 5,
+            "name": "user login to facebook",
+            "match": {
+              "location": "Facebookupdate.navigateToFBandLogin()"
+            },
+            "keyword": "Given "
+          },
+          {
+            "result": {
+              "duration": 36524813476,
+              "status": "passed"
+            },
+            "line": 6,
+            "name": "user navigates to Member",
+            "match": {
+              "location": "Facebookupdate.userNavigatesToMember()"
+            },
+            "keyword": "When "
+          },
+          {
+            "result": {
+              "duration": 57861038,
+              "status": "passed"
+            },
+            "line": 7,
+            "name": "Data is updated",
+            "match": {
+              "location": "Facebookupdate.data_is_updated()"
+            },
+            "keyword": "Then "
+          },
+          {
+            "result": {
+              "duration": 9319370355,
+              "status": "passed"
+            },
+            "line": 8,
+            "name": "DB is updated",
+            "match": {
+              "location": "Facebookupdate.dbIsUpdated()"
+            },
+            "keyword": "Then "
+          }
+        ],
+        "tags": [
+          {
+            "name": "@run1"
+          }
+        ]
+      }
+    ],
+    "name": "Update Hubspot",
+    "description": "",
+    "id": "update-hubspot",
+    "keyword": "Feature",
+    "uri": "src/test/resources/Features/UpdateDB.feature",
+    "tags": [
+      {
+        "name": "@run1",
+        "type": "Tag",
+        "location": {
+          "line": 1,
+          "column": 1
+        }
+      }
+    ]
+  }
+]
