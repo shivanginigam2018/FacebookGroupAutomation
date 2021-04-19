@@ -44,7 +44,7 @@ public class Facebookupdate {
         options.addArguments("--no-sandbox");
         options.addArguments("--incognito-");
 //        options.addArguments("start-maximised","--disable-blink-features=AutomationControlled");
-        System.setProperty("webdriver.chrome.driver", "drivers/chromedriver.exe");
+        System.setProperty("webdriver.chrome.driver", "drivers/chromedriver1.exe");
         driver = new ChromeDriver(options);
         driver.get("https://www.facebook.com/");
         driver.manage().window().maximize();
