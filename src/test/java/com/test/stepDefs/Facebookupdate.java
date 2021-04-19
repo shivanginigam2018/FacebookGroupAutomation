@@ -46,7 +46,6 @@ public class Facebookupdate {
 //        options.addArguments("start-maximised","--disable-blink-features=AutomationControlled");
         System.setProperty("webdriver.chrome.driver", "drivers/chromedriver.exe");
         driver = new ChromeDriver(options);
-
         driver.get("https://www.facebook.com/");
         driver.manage().window().maximize();
         System.out.println("Success");
@@ -73,7 +72,7 @@ public class Facebookupdate {
         JSONArray json = new JSONArray();
         Thread.sleep(5000);
         driver.navigate().to("https://www.facebook.com/groups/" + groupID + "/member-requests");
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
         if (driver.findElements(By.xpath("//span[contains(@class,'d2edcug0 hpfvmrgz qv66sw1b c1et5uql lr9zc1uh a5q79mjw g1cxx5fr knj5qynh m9osqain')]")).size() > 0) {
             String size = driver.findElement(By.xpath("//span[contains(@class,'d2edcug0 hpfvmrgz qv66sw1b c1et5uql lr9zc1uh a5q79mjw g1cxx5fr knj5qynh m9osqain')]")).getText();
             size = size.split(" . ")[1];
@@ -83,7 +82,10 @@ public class Facebookupdate {
             for (int i = 0; i < profiles.size(); i++) {
                 String data[] = profiles.get(i).getText().split("\\r?\\n");
                 if ((data[data.length - 1] != " ") && data[data.length - 1].contains("@")) {
-                    name = data[0];
+                    if(data[0].equalsIgnoreCase("Active"))
+                        name = data[1];
+                    else
+                        name=data[0];
                     email = data[data.length - 1];
                     profileID = profileIDs.get(i).getAttribute("href").split("user/")[1];
                     profileID = profileID.split("/")[0];
@@ -228,6 +230,7 @@ public class Facebookupdate {
             pw.close();
         }
         driver.close();
+        driver.quit();
     }
     }
 
