@@ -1,0 +1,61 @@
+[
+  {
+    "line": 2,
+    "elements": [
+      {
+        "line": 4,
+        "name": "Update Facebook Member data",
+        "description": "",
+        "id": "validate-fb-group-request-update;update-facebook-member-data",
+        "type": "scenario",
+        "keyword": "Scenario",
+        "steps": [
+          {
+            "result": {
+              "duration": 14756527280,
+              "status": "passed"
+            },
+            "line": 5,
+            "name": "user login to facebook",
+            "match": {
+              "location": "Facebookupdate.navigateToFBandLogin()"
+            },
+            "keyword": "Given "
+          },
+          {
+            "result": {
+              "duration": 45753591249,
+              "status": "passed"
+            },
+            "line": 6,
+            "name": "user navigates to Member requests and collate data",
+            "match": {
+              "location": "Facebookupdate.MemberRequestDataupdate()"
+            },
+            "keyword": "When "
+          }
+        ],
+        "tags": [
+          {
+            "name": "@run"
+          }
+        ]
+      }
+    ],
+    "name": "Validate FB Group Request Update",
+    "description": "",
+    "id": "validate-fb-group-request-update",
+    "keyword": "Feature",
+    "uri": "src/test/resources/Features/Login.feature",
+    "tags": [
+      {
+        "name": "@run",
+        "type": "Tag",
+        "location": {
+          "line": 1,
+          "column": 1
+        }
+      }
+    ]
+  }
+]
