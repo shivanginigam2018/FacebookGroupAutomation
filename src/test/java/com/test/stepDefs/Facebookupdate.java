@@ -29,7 +29,7 @@ import java.util.concurrent.TimeUnit;
 public class Facebookupdate {
     List<String> profilesGlobal = null;
     String groupID = null;
-    String hubspotUN = null;
+    String groupIDpro = null;
     String hubspotPass = null;
     EventFiringWebDriver eDriver;
     WebDriverEventListener eventListener;
@@ -42,7 +42,7 @@ public class Facebookupdate {
     public void navigateToFBandLogin() throws IOException, ParseException {
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--no-sandbox");
-        options.addArguments("--incognito-");
+        options.addArguments("--disable-notifications");
 //        options.addArguments("start-maximised","--disable-blink-features=AutomationControlled");
         System.setProperty("webdriver.chrome.driver", "drivers/chromedriver.exe");
         driver = new ChromeDriver(options);
@@ -55,7 +55,7 @@ public class Facebookupdate {
         Object obj = jsonParser.parse(reader);
         org.json.simple.JSONObject jsondata = (org.json.simple.JSONObject)obj;
         groupID = (String) jsondata.get("groupID");
-        hubspotUN = (String) jsondata.get("hubspotUN");
+        groupIDpro = (String) jsondata.get("groupIDPro");
         hubspotPass = (String) jsondata.get("hubspotPass");
         driver.findElement(By.id("email")).sendKeys((CharSequence) jsondata.get("usernameFB"));
         driver.findElement(By.id("pass")).sendKeys((CharSequence) jsondata.get("passwordFB"));
@@ -71,7 +71,9 @@ public class Facebookupdate {
         String name = null;
         String profileID = null;
         JSONArray json = new JSONArray();
-        Thread.sleep(5000);
+        Thread.sleep(10000);
+//        if(driver.findElements(By.xpath("//div[contains(@aria-label,'Accept All'])")).size() > 0)
+//            driver.findElement(By.xpath("//div[@aria-label='Accept All'])")).click();
         driver.navigate().to("https://www.facebook.com/groups/" + groupID + "/member-requests");
         driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
         if (driver.findElements(By.xpath("//span[contains(@class,'d2edcug0 hpfvmrgz qv66sw1b c1et5uql lr9zc1uh a5q79mjw g1cxx5fr knj5qynh m9osqain')]")).size() > 0) {
@@ -82,17 +84,20 @@ public class Facebookupdate {
             List<WebElement> profileIDs = driver.findElements(By.xpath("//div/a[contains(@href,'/groups/"+groupID+"/user')]"));
             for (int i = 0; i < profiles.size(); i++) {
                 String data[] = profiles.get(i).getText().split("\\r?\\n");
-                if ((data[data.length - 1] != " ") && data[data.length - 1].contains("@")) {
-                    if(data[0].equalsIgnoreCase("Active"))
-                        name = data[1];
-                    else
-                        name=data[0];
-                    email = data[data.length - 1];
-                    profileID = profileIDs.get(i).getAttribute("href").split("user/")[1];
-                    profileID = profileID.split("/")[0];
-                    obj.put("ProfileID", profileID);
-                    obj.put("Name", name);
-                    obj.put("Email", email);
+                for(int k = 0; k < data.length; k++) {
+                    if (data[k].equalsIgnoreCase("email") && data[k + 1] != " " && data[k + 1].contains("@")) {
+
+                        if (data[0].equalsIgnoreCase("Active"))
+                            name = data[1];
+                        else
+                            name = data[0];
+                        email = data[k + 1];
+                        profileID = profileIDs.get(i).getAttribute("href").split("user/")[1];
+                        profileID = profileID.split("/")[0];
+                        obj.put("ProfileID", profileID);
+                        obj.put("Name", name);
+                        obj.put("Email", email);
+                    }
                 }
                 System.out.println("Hi");
                 File outputfile = new File("src/test/resources/Data/output.json");
@@ -131,6 +136,7 @@ public class Facebookupdate {
         }
         driver.close();
         driver.quit();
+        Runtime.getRuntime().exec("taskkill /F /IM chromedriver.exe /T");
     }
 
     @When("^user navigates to Member$")
@@ -232,6 +238,7 @@ public class Facebookupdate {
         }
         driver.close();
         driver.quit();
+        Runtime.getRuntime().exec("taskkill /F /IM chromedriver.exe /T");
     }
     }
 
