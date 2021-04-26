@@ -39,7 +39,7 @@ public class Facebookupdate {
 
 
     @Given("^user login to facebook$")
-    public void navigateToFBandLogin() throws IOException, ParseException {
+    public void navigateToFBandLogin() throws IOException, ParseException, InterruptedException {
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--no-sandbox");
         options.addArguments("--disable-notifications");
