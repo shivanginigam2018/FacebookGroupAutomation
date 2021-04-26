@@ -57,6 +57,8 @@ public class Facebookupdate {
         groupID = (String) jsondata.get("groupID");
         groupIDpro = (String) jsondata.get("groupIDPro");
         hubspotPass = (String) jsondata.get("hubspotPass");
+        driver.findElement(By.xpath("//button[@title='Accept all']")).click();
+        Thread.sleep(4000);
         driver.findElement(By.id("email")).sendKeys((CharSequence) jsondata.get("usernameFB"));
         driver.findElement(By.id("pass")).sendKeys((CharSequence) jsondata.get("passwordFB"));
         driver.findElement(By.name("login")).click();
